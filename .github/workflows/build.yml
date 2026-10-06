@@ -1,0 +1,18 @@
+name: Build DLL
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+      - name: Compile
+        run: cl /LD /MT /O2 /EHsc esp.cpp /link /OUT:esp.dll user32.lib gdi32.lib
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: esp-dll
+          path: esp.dll
